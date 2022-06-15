@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+  nodejs:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: app_nodejs
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - '/app/node_modules'
+    links:
+      - "postgresqldb:postgresqldb"
+    depends_on:
+      - postgresqldb
+  postgresqldb:
+    container_name: postgres_nodeapp
+    image: postgres
+    restart: always
+    volumes:
+      - nodepgdata:/var/lib/postgresql/data
+    environment:
+      PGDATA: /var/lib/postgresql/data/baseproj/
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: nodeapplication
+    ports:
+      - "5432:5432"
+volumes:
+  nodepgdata:
+    external: true
+    
