@@ -4,8 +4,8 @@ FROM node:12-alpine
 RUN mkdir -p /app/node_modules && chown -R node:node /app
 WORKDIR /app
 
-#COPY package*.json ./
-COPY ["package.json", "package-lock.json", "./"]
+COPY package*.json ./
+#COPY ["package.json", "package-lock.json", "./"]
 
 #RUN npm config set unsafe-perm true
 #RUN npm install -g typescript
