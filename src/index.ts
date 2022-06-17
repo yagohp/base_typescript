@@ -27,25 +27,6 @@ AppDataSource.initialize().then(async () => {
 }).catch(error => console.log(error))
 
 
-/**
- * @swagger
- *  /jooj:
- *      get:
- *          description: Get test
- *          responses:
- *              200:
- *                  description: 'Success'
- * 
- */
-app.get('/jooj', (req, res) => {
-    res.send([
-        {
-            id: 2,
-            title: 'Teste'
-        }
-    ]);
-});
-
 app.listen(port, () => {
     console.log(`Timezones by location application is running on port ${port}.`);
 });
