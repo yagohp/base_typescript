@@ -1,0 +1,92 @@
+definitions:
+  Login:
+    type: "object"
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        example: "teste@teste.com"
+      password:
+        type: string
+        example: "pT2@4X3e"
+  UserInsert:
+    type: "object"
+    required:
+      - name
+      - email
+      - date_birth
+      - password
+      - repeat_password
+    properties:
+      name:
+        type: string
+        example: "João da Silva"
+      email:
+        type: string
+        example: "teste@teste.com"
+      date_birth:
+        type: string
+        example: "1992-12-26"
+      password:
+        type: string
+        pattern: '^[a-zA-Z0-9]{5,12}$'
+        example: "teste@teste.com"
+      repeat_password:
+        type: string
+        pattern: '^[a-zA-Z0-9]{5,12}$'
+        example: "teste@teste.com"
+  UserUpdate:
+    type: "object"
+    required:
+      - name
+      - email
+      - date_birth
+    properties:
+      name:
+        type: string
+        example: "João da Silva"
+      email:
+        type: string
+        example: "teste@teste.com"
+      date_birth:
+        type: string
+        example: "1992-12-26"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: string
+        example: "d85c3863-36bd-4aa5-bdf8-0539990a9f01"
+      name:
+        type: string
+        example: "João da Silva"
+      email:
+        type: string
+        example: "teste@teste.com"
+      date_birth:
+        type: string
+        example: "1992-12-26"
+      password:
+        type: string
+        example: "$2b$08$MzFn7SkAKx83V3cY8cPSYOgQ3GFmPdb4t9gz8ZUCyrxC28rjyiO8W"
+      token:
+        type: string
+      status:
+        type: string
+        example: "A"
+      created_at: 
+        type: string
+        example: "2022-06-14T21:07:53.947Z"
+      updated_at: 
+        type: string
+        example: "2022-06-14T21:07:53.947Z"
+  ApiResponseError:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        format: "int32"
+      errors:
+        type: "string"

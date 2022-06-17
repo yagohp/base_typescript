@@ -9,6 +9,13 @@ export interface CustomRequest extends Request {
     token: string | JwtPayload;
 }
 
+/**
+ * @swagger
+ * tags:
+ *   - name: Authentication
+ *     description: Authentication routes
+ */
+
 export default class AuthenticationRoutes implements IRoutes {
 
     private prefix: string;
@@ -20,12 +27,62 @@ export default class AuthenticationRoutes implements IRoutes {
 
     getRoutes = () => {
         return [
+            /**
+             * @swagger
+             * /api/auth/register:
+             *   post:
+             *     description: "Cria uma conta de usuário para a aplicação"
+             *     tags: [Authentication]
+             *     produces:
+             *       - application/json
+             *     parameters:
+             *     - in: "body"
+             *       name: "body"
+             *       description: "Cria uma conta de usuário para a aplicação."
+             *       required: true
+             *       schema: 
+             *         $ref: '#/definitions/UserInsert'
+             *     responses:
+             *       400:
+             *         description: Dados inválidos.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       200:
+             *         description: "Dados do usuário"
+             *         schema:
+             *           $ref: '#/definitions/User'
+             */
             {
                 method: Method.POST,
                 path: `${this.prefix}/register`,
                 validationSchema: registerSchema,
                 controllerFunc: this.usersController.saveUser
             },
+            /**
+             * @swagger
+             * /api/auth/login:
+             *   post:
+             *     description: "Login para a aplicação"
+             *     tags: [Authentication]
+             *     produces:
+             *       - application/json
+             *     parameters:
+             *     - in: "body"
+             *       name: "body"
+             *       description: "Efetua o login do usuário para obter um Bearear token."
+             *       required: true
+             *       schema: 
+             *         $ref: '#/definitions/Login'
+             *     responses:
+             *       400:
+             *         description: Dados inválidos.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       200:
+             *         description: "Dados do usuário com o Token"
+             *         schema:
+             *           $ref: '#/definitions/User'
+             */
             {
                 method: Method.POST,
                 path: `${this.prefix}/login`,
@@ -37,18 +94,91 @@ export default class AuthenticationRoutes implements IRoutes {
 
     getPrivateRoutes = () => {
         return [
+            /**
+             * @swagger
+             * /api/auth/info:
+             *   get:
+             *     description: "Obtém os dados do usuário logado."
+             *     tags: [Authentication]
+             *     produces:
+             *       - application/json
+             *     responses:
+             *       400:
+             *         description: Dados inválidos.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       201:
+             *         description: Usuário não está logado.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       200:
+             *         description: "Dados do usuário"
+             *         schema:
+             *           $ref: '#/definitions/User'
+             */
             {
                 method: Method.GET,
                 path: `${this.prefix}/info`,
                 validationSchema: Joi.object().unknown(true),
                 controllerFunc: this.usersController.getUserInfo
             },
+            /**
+             * @swagger
+             * /api/auth/:id:
+             *   put:
+             *     description: "Atualiza uma conta de usuário para a aplicação"
+             *     tags: [Authentication]
+             *     produces:
+             *       - application/json
+             *     parameters:
+             *     - in: "body"
+             *       name: "body"
+             *       description: "Atualiza uma conta de usuário para a aplicação."
+             *       required: true
+             *       schema: 
+             *         $ref: '#/definitions/UserUpdate'
+             *     responses:
+             *       400:
+             *         description: Dados inválidos.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       201:
+             *         description: Você precisa ser o usuário dessa conta para alterá-la.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       200:
+             *         description: "Dados do usuário"
+             *         schema:
+             *           $ref: '#/definitions/User'
+             */
             {
                 method: Method.PUT,
                 path: `${this.prefix}/:id`,
                 validationSchema: updateSchema,
                 controllerFunc: this.usersController.updateUserInfo
             },
+            /**
+             * @swagger
+             * /api/auth/:id:
+             *   delete:
+             *     description: "Deleta uma conta de usuário e todas as suas dependências."
+             *     tags: [Authentication]
+             *     produces:
+             *       - application/json
+             *     responses:
+             *       400:
+             *         description: Dados inválidos.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       201:
+             *         description: Você precisa ser o usuário dessa conta para alterá-la.
+             *         schema:
+             *           $ref: '#/definitions/ApiResponseError'
+             *       200:
+             *         description: "Dados do usuário removido."
+             *         schema:
+             *           $ref: '#/definitions/User'
+             */
             {
                 method: Method.DELETE,
                 path: `${this.prefix}/:id`,
@@ -99,7 +229,7 @@ const loginSchema = Joi.object({
         'string.empty': `O campo 'password' é obrigatório.`,
         "any.required": `O campo 'password' é obrigatório.`
     })
-}).with('email', 'password');
+}).with('email', 'password').label('Login');
 
 const updateSchema = Joi.object({
     name: Joi.string().trim().min(5).max(150).required().messages({
